@@ -1,9 +1,6 @@
 /*
- * Tailwind v4 entry: config lives here, with no tailwind.config.js or PostCSS plugin.
- * - Keep every @import in this top block, above @theme and the rest of the file. Install an
- *   npm package before @importing its CSS. Never @import a remote URL (web fonts, CDN CSS): the
- *   build resolves @import from the filesystem. Load those with a <link> in the head() of
- *   src/routes/__root.tsx and name the family in a --font-* token in @theme inline below.
+ * Tailwind v4 entry. Keep every @import in this top block.
+ * Web fonts load via <link> in src/routes/__root.tsx.
  */
 @import "tailwindcss" source(none);
 @source "../src";
@@ -12,24 +9,14 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system definition.
- *
- * The design lives in this file: oklch color tokens on the shadcn variables
- * (--background, --foreground, --primary, --secondary, --muted, --accent, ...) plus
- * new tokens as needed, font tokens, and custom styles and animations.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ * CODEX4 — NEON PORTAL design system.
+ * Dark midnight navy base, neon lime as the identity accent, cyan + violet as secondary glows.
+ * All colors are oklch. Theme variants switch via [data-theme] on the workbench root.
  */
 
 @theme inline {
+  --font-sans: "Sora", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -57,6 +44,12 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
+  --color-neon: var(--neon);
+  --color-cyan: var(--cyan);
+  --color-violet: var(--violet);
+  --color-gold: var(--gold);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -73,83 +66,166 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --radius: 0.75rem;
+  --background: oklch(0.15 0.03 262);
+  --foreground: oklch(0.95 0.01 250);
+  --surface: oklch(0.13 0.028 262);
+  --surface-raised: oklch(0.19 0.035 258);
+  --card: oklch(0.185 0.035 258);
+  --card-foreground: oklch(0.95 0.01 250);
+  --popover: oklch(0.17 0.035 260);
+  --popover-foreground: oklch(0.95 0.01 250);
+  --neon: oklch(0.87 0.2 132);
+  --cyan: oklch(0.82 0.14 210);
+  --violet: oklch(0.66 0.21 295);
+  --gold: oklch(0.83 0.13 85);
+  --primary: var(--neon);
+  --primary-foreground: oklch(0.18 0.05 140);
+  --secondary: oklch(0.23 0.04 258);
+  --secondary-foreground: oklch(0.95 0.01 250);
+  --muted: oklch(0.22 0.035 258);
+  --muted-foreground: oklch(0.68 0.03 250);
+  --accent: oklch(0.25 0.05 250);
+  --accent-foreground: oklch(0.97 0.01 250);
+  --destructive: oklch(0.65 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.32 0.04 255 / 60%);
+  --input: oklch(0.3 0.04 255 / 70%);
+  --ring: var(--neon);
+  --chart-1: var(--neon);
+  --chart-2: var(--cyan);
+  --chart-3: var(--violet);
+  --chart-4: var(--gold);
+  --chart-5: oklch(0.7 0.18 20);
+  --sidebar: oklch(0.13 0.028 262);
+  --sidebar-foreground: oklch(0.9 0.015 250);
+  --sidebar-primary: var(--neon);
+  --sidebar-primary-foreground: oklch(0.18 0.05 140);
+  --sidebar-accent: oklch(0.21 0.04 258);
+  --sidebar-accent-foreground: oklch(0.97 0.01 250);
+  --sidebar-border: oklch(0.3 0.04 255 / 55%);
+  --sidebar-ring: var(--neon);
+
+  --glow-strength: 1;
+  --glow-neon: 0 0 0 1px color-mix(in oklab, var(--neon) 55%, transparent),
+    0 0 calc(18px * var(--glow-strength)) color-mix(in oklab, var(--neon) 35%, transparent);
+  --glow-cyan: 0 0 0 1px color-mix(in oklab, var(--cyan) 50%, transparent),
+    0 0 calc(18px * var(--glow-strength)) color-mix(in oklab, var(--cyan) 30%, transparent);
+  --gradient-card: linear-gradient(
+    160deg,
+    color-mix(in oklab, var(--surface-raised) 92%, var(--neon)) 0%,
+    var(--card) 55%,
+    color-mix(in oklab, var(--card) 85%, var(--violet)) 100%
+  );
+  --gradient-hero-fade: linear-gradient(
+    90deg,
+    var(--surface) 0%,
+    color-mix(in oklab, var(--surface) 70%, transparent) 38%,
+    transparent 65%
+  );
+  --gradient-signature: linear-gradient(90deg, var(--neon), var(--cyan), var(--violet));
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+/* Theme variants (picked from the theme menu) */
+[data-theme="midnight"] {
+  --neon: oklch(0.82 0.14 210);
+  --primary-foreground: oklch(0.18 0.05 230);
+  --glow-strength: 0.55;
+}
+[data-theme="aurora"] {
+  --neon: oklch(0.72 0.2 300);
+  --primary-foreground: oklch(0.98 0.01 300);
+  --cyan: oklch(0.85 0.15 175);
+}
+
+/* Performance / reduced-motion mode: no animations, no blur, no glow */
+[data-motion="reduced"] *,
+[data-motion="reduced"] *::before,
+[data-motion="reduced"] *::after {
+  animation: none !important;
+  transition: none !important;
+}
+[data-motion="reduced"] {
+  --glow-strength: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @layer base {
   * {
     border-color: var(--color-border);
   }
-
-  body {
-    background-color: var(--color-background);
+  html, body {
+    background-color: var(--color-surface);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
   }
+  ::selection {
+    background: color-mix(in oklab, var(--neon) 35%, transparent);
+  }
+}
+
+@layer components {
+  .neon-frame {
+    border: 1px solid color-mix(in oklab, var(--neon) 70%, transparent);
+    box-shadow: var(--glow-neon);
+  }
+  .neon-text {
+    color: var(--neon);
+    text-shadow: 0 0 calc(12px * var(--glow-strength)) color-mix(in oklab, var(--neon) 60%, transparent);
+  }
+  .signature-text {
+    background: var(--gradient-signature);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .surface-card {
+    background: var(--gradient-card);
+    border: 1px solid var(--color-border);
+    transition: transform 220ms var(--ease-out), border-color 220ms var(--ease-out),
+      box-shadow 220ms var(--ease-out);
+  }
+  .surface-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in oklab, var(--neon) 60%, transparent);
+    box-shadow: var(--glow-neon);
+  }
+  .nav-item {
+    transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out),
+      box-shadow 160ms var(--ease-out);
+  }
+  .nav-item[data-active="true"] {
+    background: color-mix(in oklab, var(--neon) 10%, var(--sidebar-accent));
+    color: var(--foreground);
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--neon) 55%, transparent);
+  }
+  .portal-loader {
+    border-radius: 9999px;
+    border: 2px solid color-mix(in oklab, var(--cyan) 25%, transparent);
+    border-top-color: var(--cyan);
+    border-right-color: var(--neon);
+    animation: portal-spin 0.9s linear infinite;
+  }
+  .view-enter {
+    animation: view-enter 260ms var(--ease-out) both;
+  }
+  .status-dot {
+    background: var(--neon);
+    box-shadow: 0 0 calc(8px * var(--glow-strength)) var(--neon);
+  }
+}
+
+@keyframes portal-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes view-enter {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
